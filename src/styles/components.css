@@ -1,3 +1,7 @@
+* {
+  --game-dialog-font: "Pokemon GB", Arial, sans-serif;
+}
+
 
 .home-icon {
   width: 75px;
@@ -18,4 +22,23 @@
 
 .home-icon img {
   max-width: 100%;
+}
+
+.pokemon-outer-text-box {
+  border: 5px solid rgb(101, 101, 101);
+  max-width: fit-content;
+  border-radius: 5px;
+}
+
+.pokemon-inner-text-box {
+  border-radius: 5px;
+  border-color: lightgray;
+  border-width: 0px 10px;
+  border-style: solid;
+  padding: 20px 40px;
+  background-color: white;  
+}
+
+.pokemon-inner-text-box * {
+  font-family: var(--game-dialog-font);
 }
