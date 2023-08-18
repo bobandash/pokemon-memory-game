@@ -1,5 +1,5 @@
 import '../styles/components.css'
-
+import PropTypes from 'prop-types'
 
 function PokemonTextBox({children}){
   return (
@@ -12,3 +12,7 @@ function PokemonTextBox({children}){
 }
 
 export default PokemonTextBox;
+
+PokemonTextBox.propTypes = {
+  children: PropTypes.func,
+}
