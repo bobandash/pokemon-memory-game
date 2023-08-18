@@ -1,20 +1,68 @@
 .homepage-container {
   max-width: 1200px;
   width: 80%;
-  margin: 0 auto;
-  max-height: 100vh;
+  margin: auto;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .game-name {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  width: 800px;
-  max-width: 80%;
+  max-width: 800px;
+  width: 80%;
   align-items: center;
-  padding-top: 50px;
 }
 
 .game-name img {
   max-width: 100%;
+}
+
+.center-text-box {
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.difficulty-selection {
+  display: flex;
+  flex-direction: column;
+}
+
+.difficulty-selection button {
+  text-align: left;
+  font-family: var(--game-dialog-font);
+  text-transform: uppercase;
+  font-size: 40px;
+  background-color: white;
+  border: none;
+  margin: 5px 0px;
+  font-weight: 700;
+}
+
+.difficulty-selection button:focus {
+  border: none;
+  outline: none;
+}
+
+/* case: selected */
+.difficulty-selection > div {
+  display: flex;
+  align-items: center;
+}
+
+.difficulty-selection > div > i {
+  position: absolute;
+  margin-left: -20px;
+  transform: scale(2);
+}
+
+.black {
+  color: black;
+}
+
+.difficulty-selection > i {
+  margin-left: -40px;
 }
