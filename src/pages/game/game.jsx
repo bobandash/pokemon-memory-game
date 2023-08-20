@@ -8,27 +8,26 @@ import Card from './card'
 import { v4 as uuid } from 'uuid';
 import Pokemon from './pokemon'
 
-function Game({difficultySelected, handleHighScore, highScore, gameStatus}){
+function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleLoseGame, updateHighScore}){
   const [pokemon, setPokemon] = useState([]);
   const [score, setScore] = useState(0);
   const [isFinishedLoading, setIsFinishedLoading] = useState(false);
-/*   const [fivePokemonToDisplay, setFivePokemonToDisplay] = useState(0); */
+  const [fivePokemonToDisplay, setFivePokemonToDisplay] = useState([]);
+  let numCards;
+  switch(difficultySelected){
+    case DIFFICULTY_SELECTED.EASY:
+        numCards = 5;
+      break;
+    case DIFFICULTY_SELECTED.MEDIUM:
+        numCards = 10;
+      break;
+    case DIFFICULTY_SELECTED.HARD:
+        numCards = 20;
+      break;
+  }
 
 
   useEffect(() => {
-    let numCards;
-    switch(difficultySelected){
-      case DIFFICULTY_SELECTED.EASY:
-          numCards = 5;
-        break;
-      case DIFFICULTY_SELECTED.MEDIUM:
-          numCards = 10;
-        break;
-      case DIFFICULTY_SELECTED.HARD:
-          numCards = 20;
-        break;
-    }
-
     let numCardsProcessed = 0;
     const listOfRandomPokemon = [];
     async function getAllPokemonData(){
@@ -52,7 +51,8 @@ function Game({difficultySelected, handleHighScore, highScore, gameStatus}){
         const pokemonURL = allPokemonData.results[pokemonNumber].url;
         const individualPokemonData = await getIndividualPokemon(pokemonURL);
         const alreadyHasPokemon = (listOfRandomPokemon.filter(pokemon => pokemon.name === pokemonName).length > 0 ? true : false);
-        if(!alreadyHasPokemon){
+        const hasImage = (individualPokemonData.sprites.front_default !== null ? true : false)
+        if(!alreadyHasPokemon && hasImage){
           listOfRandomPokemon.push(
             new Pokemon({
               name: pokemonName,
@@ -67,7 +67,8 @@ function Game({difficultySelected, handleHighScore, highScore, gameStatus}){
         }
       }
       setPokemon([...listOfRandomPokemon]);
-      setIsFinishedLoading(true);        
+      setFivePokemonToDisplay([...listOfRandomPokemon.slice(0, 5)]);
+      setIsFinishedLoading(true);     
     }
 
     getFilteredPokemonData();
@@ -75,7 +76,70 @@ function Game({difficultySelected, handleHighScore, highScore, gameStatus}){
     return () => {
       console.log("unmounted");
     };
-  }, [difficultySelected])
+  }, [difficultySelected, numCards])
+
+
+  // check when score updates whether game is over
+  useEffect(() => {
+    if(highScore[difficultySelected] < score){
+      updateHighScore(score);
+    }
+  }, [score, highScore, difficultySelected, updateHighScore])
+
+
+  // when score updates, the random five pokemon to display needs to update as well
+  useEffect(() => {
+    function getFiveRandomPokemon(){
+      const listOfFivePokemon = [];
+      const listLength = pokemon.length;
+      const numPokemonNeeded = 5;
+      let numPokemonHave = 0;
+      while(numPokemonHave < numPokemonNeeded){
+        const randomNumber = Math.floor(Math.random() * listLength);
+        const randomPokemon = pokemon[randomNumber];
+        const alreadyHasPokemon = (listOfFivePokemon.filter(pokemon => pokemon.id === randomPokemon.id).length === 1 ? true : false)
+        if(!alreadyHasPokemon){
+          if((numPokemonHave + 1) === numPokemonNeeded){
+            const alreadyAllChosen = ((listOfFivePokemon.filter(pokemon => pokemon.hasBeenChosen === true).length === numPokemonHave) ? true : false);
+            if(!alreadyAllChosen){
+              listOfFivePokemon.push(randomPokemon);
+            } else {
+              const randomPokemonNotChosen = pokemon.filter(individualPokemon => individualPokemon.hasBeenChosen === false)[0];
+              listOfFivePokemon.push(randomPokemonNotChosen);
+            }
+          } else {
+            listOfFivePokemon.push(randomPokemon);
+          }
+          numPokemonHave += 1;
+        }
+      }
+      return listOfFivePokemon;
+    }
+    
+    if(!(score === 0 || score === numCards)){
+      const fiveRandomPokemon = getFiveRandomPokemon();
+      setFivePokemonToDisplay([...fiveRandomPokemon]);
+    }
+  }, [score, pokemon])
+
+  function handleCardClick(id){
+    const pokemonClicked = pokemon.filter(individualPokemon => id === individualPokemon.id)[0];
+    const hasBeenChosenBefore = pokemonClicked.hasBeenChosen;
+    if(hasBeenChosenBefore){
+      handleLoseGame();
+    } else {
+      if(score + 1 === numCards){
+        handleWinGame();
+      }
+      setScore(score + 1);
+      setPokemon(pokemon.map(individualPokemon => {
+        if(id === individualPokemon.id){
+          return {...individualPokemon, hasBeenChosen: true};
+        }
+        return individualPokemon;
+      }))
+    }
+  }
 
   return (
     <>
@@ -87,11 +151,9 @@ function Game({difficultySelected, handleHighScore, highScore, gameStatus}){
       </div>
       {gameStatus === GAME_STATUS.LOST && <GameStatusModalBox gameStatus = {gameStatus}/>}
       {gameStatus === GAME_STATUS.WON && <GameStatusModalBox gameStatus = {gameStatus}/>}
-      {!isFinishedLoading && <h1>Loading</h1>}
-      {isFinishedLoading && 
+      {(isFinishedLoading) && 
         <div className = "card-container">
-          <h1>Finished Loading</h1>
-          {pokemon.map(eachPokemon => <Card pokemon = {eachPokemon} key = {eachPokemon.id}/>)}
+          {fivePokemonToDisplay.map(eachPokemon => <Card pokemon = {eachPokemon} key = {eachPokemon.id} handleClick = {handleCardClick}/>)}
         </div>
       }
 
