@@ -1,7 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;700&family=Ubuntu:wght@400;700&display=swap');
+@font-face {
+  font-family: 'PokemonGB';
+  src: url('../fonts/PokemonGB.ttf') format('truetype');
+}
 
 * {
   box-sizing: border-box;
+}
+
+* {
+  --game-dialog-font: "PokemonGB", Arial, sans-serif;
 }
 
 body, html {
