@@ -1,4 +1,5 @@
 import '../../styles/game.css'
+import PropTypes from 'prop-types'
 
 function Card({pokemon, handleClick}){
   return (
@@ -8,5 +9,13 @@ function Card({pokemon, handleClick}){
     </div>
   )
 }
+
+Card.propTypes = {
+  pokemon: PropTypes.object,
+  handleClick: PropTypes.func,
+  id: PropTypes.number,
+  name: PropTypes.string
+}
+
 
 export default Card;
