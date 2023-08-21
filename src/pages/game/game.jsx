@@ -7,12 +7,14 @@ import '../../styles/game.css'
 import Card from './card'
 import { v4 as uuid } from 'uuid';
 import Pokemon from './pokemon'
+import PropTypes from 'prop-types'
 
-function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleLoseGame, updateHighScore}){
+function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleLoseGame, updateHighScore, handleNavHomePage, handleStartGame}){
   const [pokemon, setPokemon] = useState([]);
   const [score, setScore] = useState(0);
   const [isFinishedLoading, setIsFinishedLoading] = useState(false);
   const [fivePokemonToDisplay, setFivePokemonToDisplay] = useState([]);
+  const [numGamesPlayed, setNumGamesPlayed] = useState(0);
   let numCards;
   switch(difficultySelected){
     case DIFFICULTY_SELECTED.EASY:
@@ -76,7 +78,7 @@ function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleL
     return () => {
       console.log("unmounted");
     };
-  }, [difficultySelected, numCards])
+  }, [difficultySelected, numCards, numGamesPlayed])
 
 
   // check when score updates whether game is over
@@ -123,22 +125,30 @@ function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleL
   }, [score, pokemon])
 
   function handleCardClick(id){
-    const pokemonClicked = pokemon.filter(individualPokemon => id === individualPokemon.id)[0];
-    const hasBeenChosenBefore = pokemonClicked.hasBeenChosen;
-    if(hasBeenChosenBefore){
-      handleLoseGame();
-    } else {
-      if(score + 1 === numCards){
-        handleWinGame();
-      }
-      setScore(score + 1);
-      setPokemon(pokemon.map(individualPokemon => {
-        if(id === individualPokemon.id){
-          return {...individualPokemon, hasBeenChosen: true};
+    if(gameStatus === GAME_STATUS.IN_PROGRESS){
+      const pokemonClicked = pokemon.filter(individualPokemon => id === individualPokemon.id)[0];
+      const hasBeenChosenBefore = pokemonClicked.hasBeenChosen;
+      if(hasBeenChosenBefore){
+        handleLoseGame();
+      } else {
+        if(score + 1 === numCards){
+          handleWinGame();
         }
-        return individualPokemon;
-      }))
+        setScore(score + 1);
+        setPokemon(pokemon.map(individualPokemon => {
+          if(id === individualPokemon.id){
+            return {...individualPokemon, hasBeenChosen: true};
+          }
+          return individualPokemon;
+        }))
+      }
     }
+  }
+
+  function handleRestartGame(){
+    setNumGamesPlayed(numGamesPlayed + 1);
+    setScore(0);
+    handleStartGame();
   }
 
   return (
@@ -149,17 +159,27 @@ function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleL
           <p>High Score: {highScore[difficultySelected]}</p>
         </PokemonTextBox>
       </div>
-      {gameStatus === GAME_STATUS.LOST && <GameStatusModalBox gameStatus = {gameStatus}/>}
-      {gameStatus === GAME_STATUS.WON && <GameStatusModalBox gameStatus = {gameStatus}/>}
+      {gameStatus === GAME_STATUS.LOST && <GameStatusModalBox gameStatus = {gameStatus} handleNavHomePage = {handleNavHomePage} handleRestartGame = {handleRestartGame} />}
+      {gameStatus === GAME_STATUS.WON && <GameStatusModalBox gameStatus = {gameStatus} handleNavHomePage = {handleNavHomePage} handleRestartGame = {handleRestartGame}/>}
       {(isFinishedLoading) && 
         <div className = "card-container">
           {fivePokemonToDisplay.map(eachPokemon => <Card pokemon = {eachPokemon} key = {eachPokemon.id} handleClick = {handleCardClick}/>)}
         </div>
       }
-
-
     </>
   )
 }
+
+Game.propTypes = {
+  difficultySelected: PropTypes.integer,
+  highScore: PropTypes.integer,
+  gameStatus: PropTypes.integer,
+  handleWinGame: PropTypes.func,
+  handleLoseGame: PropTypes.func,
+  updateHighScore: PropTypes.func,
+  handleNavHomePage: PropTypes.func,
+  handleStartGame: PropTypes.func
+}
+
 
 export default Game;
