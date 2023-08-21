@@ -1,8 +1,8 @@
 const DIFFICULTY_SELECTED = {
-  NONE: 0,
-  EASY: 1,
-  MEDIUM: 2,
-  HARD: 3,
+  NONE: 'NONE',
+  EASY: 'EASY',
+  MEDIUM: 'MEDIUM',
+  HARD: 'HARD',
 }
 
 export default DIFFICULTY_SELECTED;
