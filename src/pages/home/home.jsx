@@ -4,8 +4,10 @@ import PokemonTextBox from '../../components/pokemon-text-box.jsx'
 import '../../styles/home.css'
 import DIFFICULTY_SELECTED from '../../data/difficulty';
 import PropTypes from 'prop-types'
+import HomePageBgMusic from '../../sounds/Eterna Forest.mp3'
+import optionSelectMusic from '../../sounds/pokemon-option-select.mp3'
 
-function HomePage({handleSetDifficulty, difficultySelected, handleStartGame}) {
+function HomePage({handleSetDifficulty, difficultySelected, handleStartGame, isSoundEnabled}) {
   function handleSetDifficultyEasy(){
     handleSetDifficulty(DIFFICULTY_SELECTED.EASY)
   }
@@ -17,11 +19,20 @@ function HomePage({handleSetDifficulty, difficultySelected, handleStartGame}) {
   function handleSetDifficultyHard(){
     handleSetDifficulty(DIFFICULTY_SELECTED.HARD);
   }
+  
+  function selectModeSound(){
+    let optionSelectAudio = new Audio(optionSelectMusic)
+    optionSelectAudio.play();
+  }
 
 
   //TO-DO fix the tab index when the page rerenders
   return (
     <>
+      {isSoundEnabled && 
+      <audio controls autoPlay loop>
+        <source src = {HomePageBgMusic} type = "audio/mpeg" />
+      </audio>}
       <HomePageContainer>
         <GameName />
         <div className = "center-text-box">
@@ -33,7 +44,10 @@ function HomePage({handleSetDifficulty, difficultySelected, handleStartGame}) {
                     <button onClick = {handleStartGame} className = "selected" tabIndex = "1" autoFocus>Easy</button>
                   </div>
                   :
-                  <button tabIndex = "1" onClick = {handleSetDifficultyEasy}>Easy</button>
+                  <button tabIndex = "1" onFocus = {() => {
+                    selectModeSound();
+                    handleSetDifficultyEasy();
+                  }} onClick = {handleSetDifficultyEasy}>Easy</button>
                 }
                 {(difficultySelected === DIFFICULTY_SELECTED.MEDIUM) ? 
                   <div>
@@ -41,7 +55,10 @@ function HomePage({handleSetDifficulty, difficultySelected, handleStartGame}) {
                     <button onClick = {handleStartGame} className = "selected" tabIndex = "2" autoFocus>Medium</button>
                   </div>
                  :
-                  <button tabIndex = "2" onClick = {handleSetDifficultyMedium}>Medium</button>
+                  <button tabIndex = "2" onFocus =  {() => {
+                    selectModeSound();
+                    handleSetDifficultyMedium();
+                  }} onClick = {handleSetDifficultyMedium}>Medium</button>
                 }
                 {(difficultySelected === DIFFICULTY_SELECTED.HARD) ? 
                   <div>
@@ -49,7 +66,10 @@ function HomePage({handleSetDifficulty, difficultySelected, handleStartGame}) {
                     <button onClick = {handleStartGame} className = "selected" tabIndex = "3" autoFocus>Hard</button>
                   </div>
                   :
-                  <button tabIndex = "3" onClick = {handleSetDifficultyHard}>Hard</button>
+                  <button tabIndex = "3" onFocus =  {() => {
+                    selectModeSound();
+                    handleSetDifficultyHard();
+                  }} onClick = {handleSetDifficultyHard}>Hard</button>
                 }
 
               </div>            
@@ -64,6 +84,7 @@ HomePage.propTypes = {
   handleSetDifficulty: PropTypes.func,
   difficultySelected: PropTypes.number,
   handleStartGame: PropTypes.func,
+  isSoundEnabled: PropTypes.bool,
 }
 
 

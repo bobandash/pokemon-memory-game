@@ -1,11 +1,11 @@
 .homepage-container {
   max-width: 1200px;
-  width: 80%;
+  width: 95%;
   margin: auto;
   min-height: 90vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 .game-name {
@@ -35,10 +35,10 @@
   text-align: left;
   font-family: var(--game-dialog-font);
   text-transform: uppercase;
-  font-size: 40px;
+  font-size: 24px;
   background-color: white;
   border: none;
-  margin: 5px 0px;
+  margin: 12.5px 0px;
   font-weight: 700;
 }
 
@@ -65,4 +65,23 @@
 
 .difficulty-selection > i {
   margin-left: -40px;
+}
+
+.game-name {
+  margin-bottom: 20px
+}
+
+
+@media screen and (min-width: 600px) {
+  .game-name {
+    margin-top: 0px;
+  }
+
+  .homepage-container {
+    justify-content: space-evenly;
+  }
+
+  .difficulty-selection button {
+    font-size: 40px;
+  }
 }
