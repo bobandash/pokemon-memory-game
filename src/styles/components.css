@@ -1,16 +1,39 @@
-.home-icon {
+.icon-container {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 10vh;
+  align-items: center;
+}
+
+.home-icon, .sound-icon {
   width: 75px;
   padding: 0;
   margin: 0;
   border: none;
   border-radius: 50%;
   display: flex;
-  position: absolute;
-  top: 2.5%;
-  left: 7.5%;
 }
 
-.home-icon:hover {
+.sound-icon {
+  border: 1px solid black;
+  background-color: white;
+  aspect-ratio: 1 / 1;
+}
+
+.sound-icon {
+  align-items: center;
+  justify-content: center;
+}
+
+.sound-icon i {
+  transform: scale(2);
+}
+
+
+.home-icon:hover, .sound-icon:hover {
   cursor: pointer;
   box-shadow: 2px 2px black;
 }
@@ -18,6 +41,7 @@
 .home-icon img {
   max-width: 100%;
 }
+
 
 .pokemon-outer-text-box {
   border: 5px solid rgb(101, 101, 101);
@@ -30,10 +54,16 @@
   border-color: lightgray;
   border-width: 0px 10px;
   border-style: solid;
-  padding: 20px 40px;
+  padding: 1px 10px;
   background-color: white;  
 }
 
 .pokemon-inner-text-box * {
   font-family: var(--game-dialog-font);
+}
+
+@media screen and (min-width: 500px) {
+  .pokemon-inner-text-box {
+    padding: 20px 40px;
+  }
 }
