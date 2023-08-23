@@ -8,13 +8,19 @@ import Card from './card'
 import { v4 as uuid } from 'uuid';
 import Pokemon from './pokemon'
 import PropTypes from 'prop-types'
+import gymLeaderMusic from '../../sounds/Battle! (Gym Leader).mp3'
+import optionSelectMusic from '../../sounds/pokemon-option-select.mp3'
+import worldChampionMusic from '../../sounds/Congratulations on Entering the Hall of Fame!.mp3'
+import pokemonCenterMusic from '../../sounds/Pokémon Center (Day).mp3'
+import LoadingScreen from "./loading-screen";
 
-function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleLoseGame, updateHighScore, handleNavHomePage, handleStartGame}){
+function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleLoseGame, updateHighScore, handleNavHomePage, handleStartGame, isSoundEnabled}){
   const [pokemon, setPokemon] = useState([]);
   const [score, setScore] = useState(0);
   const [isFinishedLoading, setIsFinishedLoading] = useState(false);
   const [fivePokemonToDisplay, setFivePokemonToDisplay] = useState([]);
   const [numGamesPlayed, setNumGamesPlayed] = useState(0);
+  
   let numCards;
   switch(difficultySelected){
     case DIFFICULTY_SELECTED.EASY:
@@ -151,20 +157,44 @@ function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleL
     handleStartGame();
   }
 
+  // for audio
+  function selectModeSound(){
+    let optionSelectAudio = new Audio(optionSelectMusic)
+    optionSelectAudio.play();
+  }
+
   return (
     <>
-      <div className = "scoreboard-container">
-        <PokemonTextBox>
-          <p>Score: {score}</p>
-          <p>High Score: {highScore[difficultySelected]}</p>
-        </PokemonTextBox>
-      </div>
-      {gameStatus === GAME_STATUS.LOST && <GameStatusModalBox gameStatus = {gameStatus} handleNavHomePage = {handleNavHomePage} handleRestartGame = {handleRestartGame} />}
-      {gameStatus === GAME_STATUS.WON && <GameStatusModalBox gameStatus = {gameStatus} handleNavHomePage = {handleNavHomePage} handleRestartGame = {handleRestartGame}/>}
-      {(isFinishedLoading) && 
-        <div className = "card-container">
-          {fivePokemonToDisplay.map(eachPokemon => <Card pokemon = {eachPokemon} key = {eachPokemon.id} handleClick = {handleCardClick}/>)}
-        </div>
+      {(isSoundEnabled && gameStatus === GAME_STATUS.IN_PROGRESS) && 
+        <audio controls autoPlay loop>
+          <source src = {gymLeaderMusic} type = "audio/mpeg" />
+        </audio>
+      }
+      {(isSoundEnabled && gameStatus === GAME_STATUS.WON) && 
+        <audio controls autoPlay loop>
+          <source src = {worldChampionMusic} type = "audio/mpeg" />
+        </audio>
+      }
+      {(isSoundEnabled && gameStatus === GAME_STATUS.LOST) && 
+        <audio controls autoPlay loop>
+          <source src = {pokemonCenterMusic} type = "audio/mpeg" />
+        </audio>
+      }
+      {!isFinishedLoading && <LoadingScreen />}
+      {isFinishedLoading && 
+        <>
+          <div className = "scoreboard-container">
+            <PokemonTextBox>
+              <p>Score: {score}</p>
+              <p>High Score: {highScore[difficultySelected]}</p>
+            </PokemonTextBox>
+          </div>
+          {gameStatus === GAME_STATUS.LOST && <GameStatusModalBox gameStatus = {gameStatus} handleNavHomePage = {handleNavHomePage} handleRestartGame = {handleRestartGame} />}
+          {gameStatus === GAME_STATUS.WON && <GameStatusModalBox gameStatus = {gameStatus} handleNavHomePage = {handleNavHomePage} handleRestartGame = {handleRestartGame}/>}
+          <div className = "card-container">
+            {fivePokemonToDisplay.map(eachPokemon => <Card selectModeSound = {selectModeSound} pokemon = {eachPokemon} key = {eachPokemon.id} handleClick = {handleCardClick}/>)}
+          </div>
+        </>
       }
     </>
   )

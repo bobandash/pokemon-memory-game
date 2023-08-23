@@ -1,7 +1,8 @@
 .scoreboard-container {
   position: absolute;
-  right: 7.5%;
+  left: 50%;
   top: 2.5%;
+  transform: translateX(-50%);
 }
 
 .scoreboard-container * {
@@ -100,3 +101,69 @@
   width: 50%;
 }
 
+
+.scoreboard-container p {
+  font-size: 12px;
+}
+
+/* css for loading screen */
+.loading-screen {
+  min-height: 90vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+}
+
+.loading-animations {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.loading-screen h1 {
+  text-align: center;
+}
+
+.loading-textbox-container {
+  display: flex;
+  justify-content: center;
+}
+
+.loading-screen h1 {
+  overflow: hidden;
+  animation: typing 5.5s steps(10) infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+
+@keyframes running {
+  from {
+    left: -10%;
+  }
+
+  to {
+    left: 100%;
+  }
+}
+
+#pikachu-running-gif {
+  position: absolute;
+  animation-name: running;
+  animation-duration: 5.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@media screen and (max-width: 800px) {
+  #pikachu-running-gif {
+    width: 200px;
+  }
+}
