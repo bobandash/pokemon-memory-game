@@ -58,7 +58,6 @@ function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleL
         const pokemonName = allPokemonData.results[pokemonNumber].name;
         const pokemonURL = allPokemonData.results[pokemonNumber].url;
         const individualPokemonData = await getIndividualPokemon(pokemonURL);
-        console.log(individualPokemonData);
         const alreadyHasPokemon = (listOfRandomPokemon.filter(pokemon => pokemon.name === pokemonName).length > 0 ? true : false);
         const hasImage = (individualPokemonData.sprites.front_default !== null ? true : false)
         if(!alreadyHasPokemon && hasImage){
