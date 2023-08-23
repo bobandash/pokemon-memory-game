@@ -1,11 +1,13 @@
 import '../../styles/game.css'
 import PropTypes from 'prop-types'
 
-function Card({pokemon, handleClick, selectModeSound}){
+function Card({isSoundEnabled, pokemon, handleClick, selectModeSound}){
   return (
     <div onClick = {() =>  {
       handleClick(pokemon.id);
-      selectModeSound();
+      if(isSoundEnabled){
+        selectModeSound();
+      }
     }} className = "card">
       <img src = {pokemon.image} />
       <p className = "pokemon-name">{pokemon.name.replace("-"," ")}</p>
@@ -17,7 +19,9 @@ Card.propTypes = {
   pokemon: PropTypes.object,
   handleClick: PropTypes.func,
   id: PropTypes.number,
-  name: PropTypes.string
+  name: PropTypes.string,
+  isSoundEnabled: PropTypes.bool,
+  selectModeSound: PropTypes.func
 }
 
 
