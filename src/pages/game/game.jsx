@@ -204,9 +204,9 @@ function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleL
 }
 
 Game.propTypes = {
-  difficultySelected: PropTypes.integer,
-  highScore: PropTypes.integer,
-  gameStatus: PropTypes.integer,
+  difficultySelected: PropTypes.string,
+  highScore: PropTypes.object,
+  gameStatus: PropTypes.number,
   handleWinGame: PropTypes.func,
   handleLoseGame: PropTypes.func,
   updateHighScore: PropTypes.func,

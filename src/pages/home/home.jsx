@@ -80,7 +80,7 @@ function HomePage({handleSetDifficulty, difficultySelected, handleStartGame, isS
 
 HomePage.propTypes = {
   handleSetDifficulty: PropTypes.func,
-  difficultySelected: PropTypes.number,
+  difficultySelected: PropTypes.string,
   handleStartGame: PropTypes.func,
   isSoundEnabled: PropTypes.bool,
 }

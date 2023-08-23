@@ -10,7 +10,7 @@ function HomePageContainer({children}){
 
 
 HomePageContainer.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.element),
+  children: PropTypes.array
 }
 
 export default HomePageContainer;

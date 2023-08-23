@@ -14,5 +14,5 @@ function PokemonTextBox({children}){
 export default PokemonTextBox;
 
 PokemonTextBox.propTypes = {
-  children: PropTypes.array,
+  children: PropTypes.object,
 }
