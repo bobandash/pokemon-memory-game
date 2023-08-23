@@ -128,7 +128,7 @@ function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleL
       const fiveRandomPokemon = getFiveRandomPokemon();
       setFivePokemonToDisplay([...fiveRandomPokemon]);
     }
-  }, [score, pokemon])
+  }, [score, pokemon, numCards])
 
   function handleCardClick(id){
     if(gameStatus === GAME_STATUS.IN_PROGRESS){
@@ -194,7 +194,7 @@ function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleL
             {gameStatus === GAME_STATUS.LOST && <GameStatusModalBox gameStatus = {gameStatus} handleNavHomePage = {handleNavHomePage} handleRestartGame = {handleRestartGame} />}
             {gameStatus === GAME_STATUS.WON && <GameStatusModalBox gameStatus = {gameStatus} handleNavHomePage = {handleNavHomePage} handleRestartGame = {handleRestartGame}/>}
             <div className = "card-container">
-              {fivePokemonToDisplay.map(eachPokemon => <Card selectModeSound = {selectModeSound} pokemon = {eachPokemon} key = {eachPokemon.id} handleClick = {handleCardClick}/>)}
+              {fivePokemonToDisplay.map(eachPokemon => <Card isSoundEnabled = {isSoundEnabled} selectModeSound = {selectModeSound} pokemon = {eachPokemon} key = {eachPokemon.id} handleClick = {handleCardClick}/>)}
             </div>
           </div>
         </>

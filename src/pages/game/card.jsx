@@ -5,6 +5,7 @@ function Card({isSoundEnabled, pokemon, handleClick, selectModeSound}){
   return (
     <div onClick = {() =>  {
       handleClick(pokemon.id);
+      console.log(isSoundEnabled);
       if(isSoundEnabled){
         selectModeSound();
       }
