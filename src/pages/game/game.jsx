@@ -58,6 +58,7 @@ function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleL
         const pokemonName = allPokemonData.results[pokemonNumber].name;
         const pokemonURL = allPokemonData.results[pokemonNumber].url;
         const individualPokemonData = await getIndividualPokemon(pokemonURL);
+        console.log(individualPokemonData);
         const alreadyHasPokemon = (listOfRandomPokemon.filter(pokemon => pokemon.name === pokemonName).length > 0 ? true : false);
         const hasImage = (individualPokemonData.sprites.front_default !== null ? true : false)
         if(!alreadyHasPokemon && hasImage){
@@ -154,6 +155,7 @@ function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleL
   function handleRestartGame(){
     setNumGamesPlayed(numGamesPlayed + 1);
     setScore(0);
+    setIsFinishedLoading(false);
     handleStartGame();
   }
 
@@ -183,16 +185,18 @@ function Game({difficultySelected, highScore, gameStatus, handleWinGame, handleL
       {!isFinishedLoading && <LoadingScreen />}
       {isFinishedLoading && 
         <>
-          <div className = "scoreboard-container">
-            <PokemonTextBox>
-              <p>Score: {score}</p>
-              <p>High Score: {highScore[difficultySelected]}</p>
-            </PokemonTextBox>
-          </div>
-          {gameStatus === GAME_STATUS.LOST && <GameStatusModalBox gameStatus = {gameStatus} handleNavHomePage = {handleNavHomePage} handleRestartGame = {handleRestartGame} />}
-          {gameStatus === GAME_STATUS.WON && <GameStatusModalBox gameStatus = {gameStatus} handleNavHomePage = {handleNavHomePage} handleRestartGame = {handleRestartGame}/>}
-          <div className = "card-container">
-            {fivePokemonToDisplay.map(eachPokemon => <Card selectModeSound = {selectModeSound} pokemon = {eachPokemon} key = {eachPokemon.id} handleClick = {handleCardClick}/>)}
+          <div className = "game">
+            <div className = "scoreboard-container">
+              <PokemonTextBox>
+                <p>Score: {score}</p>
+                <p>High Score: {highScore[difficultySelected]}</p>
+              </PokemonTextBox>
+            </div>
+            {gameStatus === GAME_STATUS.LOST && <GameStatusModalBox gameStatus = {gameStatus} handleNavHomePage = {handleNavHomePage} handleRestartGame = {handleRestartGame} />}
+            {gameStatus === GAME_STATUS.WON && <GameStatusModalBox gameStatus = {gameStatus} handleNavHomePage = {handleNavHomePage} handleRestartGame = {handleRestartGame}/>}
+            <div className = "card-container">
+              {fivePokemonToDisplay.map(eachPokemon => <Card selectModeSound = {selectModeSound} pokemon = {eachPokemon} key = {eachPokemon.id} handleClick = {handleCardClick}/>)}
+            </div>
           </div>
         </>
       }

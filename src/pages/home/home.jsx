@@ -25,8 +25,6 @@ function HomePage({handleSetDifficulty, difficultySelected, handleStartGame, isS
     optionSelectAudio.play();
   }
 
-
-  //TO-DO fix the tab index when the page rerenders
   return (
     <>
       {isSoundEnabled && 
@@ -41,10 +39,10 @@ function HomePage({handleSetDifficulty, difficultySelected, handleStartGame, isS
                 {(difficultySelected === DIFFICULTY_SELECTED.EASY) ? 
                   <div>
                     <i className="fa-solid fa-caret-right black"></i>
-                    <button onClick = {handleStartGame} className = "selected" tabIndex = "1" autoFocus>Easy</button>
+                    <button onClick = {handleStartGame} className = "selected" data-id = "first-index" tabIndex = "1" autoFocus>Easy</button>
                   </div>
                   :
-                  <button tabIndex = "1" onFocus = {() => {
+                  <button data-id = "first-index" tabIndex = "1" onFocus = {() => {
                     selectModeSound();
                     handleSetDifficultyEasy();
                   }} onClick = {handleSetDifficultyEasy}>Easy</button>
@@ -63,10 +61,10 @@ function HomePage({handleSetDifficulty, difficultySelected, handleStartGame, isS
                 {(difficultySelected === DIFFICULTY_SELECTED.HARD) ? 
                   <div>
                     <i className="fa-solid fa-caret-right black"></i>
-                    <button onClick = {handleStartGame} className = "selected" tabIndex = "3" autoFocus>Hard</button>
+                    <button onClick = {handleStartGame} className = "selected" tabIndex = "3" data-id = "last-index" autoFocus>Hard</button>
                   </div>
                   :
-                  <button tabIndex = "3" onFocus =  {() => {
+                  <button data-id = "last-index" tabIndex = "3" onFocus =  {() => {
                     selectModeSound();
                     handleSetDifficultyHard();
                   }} onClick = {handleSetDifficultyHard}>Hard</button>
